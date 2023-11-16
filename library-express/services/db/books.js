@@ -1,11 +1,11 @@
-const db = require('../models');
+const db = require('../../models');
 
-exports.getBooks = () => {
-    return db.books.findAll();
+exports.getBooks = async () => {
+    return await db.books.findAll();
 }
 
-exports.getBookById = (id) => {
-    return db.books.findOne({
+exports.getBookById = async (id) => {
+    return await db.books.findOne({
         where: {
             id
         }

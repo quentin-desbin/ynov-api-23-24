@@ -1,14 +1,14 @@
-const booksService = require('../services/books')
+const booksService = require('../services/db/books')
 const createError = require('http-errors')
 
-exports.getBooks = (req, res) => {
-   const books = booksService.getBooks()
+exports.getBooks = async (req, res) => {
+   const books = await booksService.getBooks()
    res.set('Cache-Control', 'max-age=30') // Using client cache
    res.json({success: true, data: books})
 }
 
-exports.getBookById = (req, res, next) => {
-   const book = booksService.getBookById(req.params.id)
+exports.getBookById = async (req, res, next) => {
+   const book = await booksService.getBookById(req.params.id)
    if (book) {
       res.json({success: true, data: book})
    } else {
