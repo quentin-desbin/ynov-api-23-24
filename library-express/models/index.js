@@ -14,6 +14,10 @@ const instance = new Sequelize({
     storage: dbConfig.storage
 })
 
+// 1 seul module.exports mais plusieurs exports, équivalence:
+// exports.instance = instance
+// exports.users = require('users')(instance)
+
 module.exports = {
     instance,
     users: require('./users')(instance),
