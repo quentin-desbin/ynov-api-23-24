@@ -1,4 +1,4 @@
-# Séance 1 - Résumé
+# Séance 1 - Résumé [DEV API - Toulouse Ynov Campus - 2023/2024]
 
 ## Qu'est-ce qu'une API ?
 
