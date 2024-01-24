@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const db = require('../models/index');
-const bcrypt = require('bcrypt');
+const usersService = require('../services/db/users')
+const createError = require('http-errors')
 
 exports.authMiddleware = async (req, res, next) => {
     // When test environment, we need to disabled auth
@@ -25,29 +25,35 @@ exports.authMiddleware = async (req, res, next) => {
     }
 }
 
-exports.register = async (req, res) => {}
+exports.register = async (req, res, next) => {
+    const {username, password, firstName, lastName} = req.body
 
-exports.login = async (req, res) => {
-    if (req.body.username && req.body.password) {
-        const user = await db.users.findOne({
-            where: {username: req.body.username}
-        });
-        if (user) {
-            const verifiedUser = await bcrypt.compare(req.body.password, user.password);
-            if (verifiedUser) {
-                const token = jwt.sign({
-                    data: {id: user.id, username: user.username}
-                }, process.env.SECRET, {
-                    expiresIn: '30s'
-                });
-                res.status(200).json({success: true, token});
-            } else {
-                res.status(401).json({success: false, message: 'Password is incorrect'});
-            }
-        } else {
-            res.status(404).json({success: false, message: 'This user doesn\'t exists'});
+    if (!username || !password || !firstName || !lastName) {
+        return res.status(400).json({ error: 'All inputs are mandatory!' });
+    }
+    try {
+        const user = await usersService.addUser(username, password, firstName, lastName)
+        if (!user) {
+            return next(createError(500, 'cannot register user'))
         }
-    } else {
-        res.status(400).json({success: false, message: 'username and password are required'});
+        return res.status(201).send()
+    } catch(e) {
+        next(createError(400, e.message))
+    }
+}
+
+exports.login = async (req, res, next) => {
+    const {username, password} = req.body
+    if (!username || !password) {
+        return res.status(400).json({ error: 'username & password are mandatory' });
+    }
+
+    try {
+        const token = await usersService.login(username, password)
+        if (token) {
+            return res.status(200).json({success: true, token})
+        }
+    } catch(e) {
+        return next(createError(e.statusCode, e.message))
     }
 }

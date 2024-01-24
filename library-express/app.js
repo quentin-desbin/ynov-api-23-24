@@ -2,12 +2,8 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const OpenApiValidator = require('express-openapi-validator')
-const swaggerUi = require('swagger-ui-express')
-const YAML = require('yamljs')
-
-// Déclaration du swagger document pour être servi en statique
-const swaggerDocument = YAML.load('./open-api.yaml')
+const OpenApiValidator = require('express-openapi-validator') // Module pour valider automatiquement les requêtes
+require('dotenv').config() // Module pour charger un .env
 
 // Utilisation de middleware globaux
 app.use(cors()); // Autorise toutes les requêtes de tout origine
@@ -28,11 +24,9 @@ app.use('/books', booksRouter);
 const reviewRouter = require('./routers/reviews')
 app.use('/reviews', reviewRouter)
 
-const loginRouter = require('./routers/login')
-app.use('/login', loginRouter)
-
-// Par défaut quand on appellera "/" on veut servir en statique la doc OpenAPI
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+// Router pour gérer les users et leur authentification
+const usersRouter = require('./routers/users')
+app.use('/users', usersRouter)
 
 // Déclaration globale du middleware d'erreur, on assume que le paramètre error, possède certains attributs
 app.use((error, req, res, next) => {
