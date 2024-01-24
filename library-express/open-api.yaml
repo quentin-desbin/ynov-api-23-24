@@ -23,6 +23,29 @@ tags:
   - name: reviews
     description: Everything about Reviews
 paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Register as user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [username, password, firstName, lastName]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+      responses:
+        "200":
+          description: "OK"
+
   /books:
     get:
       tags:

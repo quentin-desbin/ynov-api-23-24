@@ -1,25 +1,25 @@
-const db = require('../../models');
+const { books } = require('../../models')
 
 exports.getBooks = async () => {
-    return await db.books.findAll();
+    return await books.findAll()
 }
 
 exports.getBookById = async (id) => {
-    return await db.books.findOne({
+    return await books.findOne({
         where: {
             id
         }
-    });
+    })
 }
 
 exports.addBook = (title, date) => {
-    return db.books.create({title, date});
+    return books.create({title, date})
 }
 
 exports.deleteBookById = (id) => {
-    return db.books.destroy({
+    return books.destroy({
         where: {
             id
         }
-    });
+    })
 }
