@@ -13,7 +13,7 @@ app.use(express.json()); // Permet de parser automatiquement le json en entrée
 app.use(
     OpenApiValidator.middleware({
         apiSpec: './open-api.yaml',
-        ignoreUndocumented: false
+        ignoreUndocumented: true
     })
 )
 
@@ -26,7 +26,7 @@ app.use('/reviews', reviewRouter)
 
 // Router pour gérer les users et leur authentification
 const authRouter = require('./routers/auth')
-app.use('/auth', usersRouter)
+app.use('/auth', authRouter)
 
 // Déclaration globale du middleware d'erreur, on assume que le paramètre error, possède certains attributs
 app.use((error, req, res, next) => {
