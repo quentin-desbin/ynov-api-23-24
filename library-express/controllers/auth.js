@@ -4,11 +4,7 @@ const createError = require('http-errors');
 const { ServerError } = require('../errors');
 
 exports.authMiddleware = async (req, res, next) => {
-    // When test environment, we force disabling auth (not best solution)
-    if (process.env.JEST_WORKER_ID !== undefined) {
-        next()
-        return;
-    }
+
     if (req.headers && !req.headers.authorization) {
         res.status(401).json({success: false, message: 'You need to be authenticated'});
     } else {
@@ -16,6 +12,7 @@ exports.authMiddleware = async (req, res, next) => {
         try {
             const decodedToken = await jwt.verify(token, process.env.SECRET);
             if (decodedToken) {
+                // We can store in req.locals = {} some info about the user to propagate into next controller
                 next();
             } else {
                 next(createError(401, 'Authentication is no more valid'))

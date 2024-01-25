@@ -29,19 +29,19 @@ exports.addUser = async (username, password, firstName, lastName) => {
 
 exports.login = async (username, password) => {
     const user = await this.getUserByUsername(username)
-    if (user) {
-        const verifiedUser = await bcrypt.compare(password, user.password)
-        if (verifiedUser) {
-            const token = jwt.sign({
-                data: {id: user.id, username: user.username}
-            }, process.env.SECRET, {
-                expiresIn: '30s'
-            })
-            return token
-        } else {
-            throw new NotLogged('password incorrect for username')
-        }
-    } else {
+    if (!user) {
         throw new NotFound('no user found for username: ' + username)
     }
+
+    const verifiedUser = await bcrypt.compare(password, user.password)
+    if (!verifiedUser) {
+        throw new NotLogged('password incorrect for username')
+    }
+    
+    const token = jwt.sign({
+        data: {id: user.id, username: user.username}
+    }, process.env.SECRET, {
+        expiresIn: '30s'
+    })
+    return token
 }
