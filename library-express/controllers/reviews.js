@@ -7,7 +7,7 @@ exports.getReviews = async (req, res) => {
    res.json({success: true, data: reviews})
 }
 
-// Example of "what should not be present on controller"
+// Example of "what should not be present on controller" and what is bad
 exports.addReview = async (req, res) => {
    if (req.body && req.body.userId && req.body.bookId && req.body.note) {
       const user = usersService.getUserById(req.body.userId)
