@@ -3,7 +3,6 @@ const usersService = require('../services/db/users')
 const createError = require('http-errors');
 const { ServerError } = require('../errors');
 
-// TODO : To present later
 exports.authMiddleware = async (req, res, next) => {
     // When test environment, we force disabling auth (not best solution)
     if (process.env.JEST_WORKER_ID !== undefined) {
