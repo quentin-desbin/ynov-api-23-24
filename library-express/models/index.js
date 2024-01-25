@@ -29,5 +29,8 @@ module.exports = {
 }
 
 // Define associations between models
+instance.models.user.hasOne(instance.models.review)
+instance.models.book.hasOne(instance.models.review)
+
 instance.models.review.belongsTo(instance.models.user)
 instance.models.review.belongsTo(instance.models.book)
