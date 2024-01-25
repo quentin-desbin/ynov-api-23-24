@@ -1,9 +1,9 @@
-const reviewsService = require('../services/reviews')
+const reviewsService = require('../services/db/reviews')
 const usersService = require('../services/users')
 const booksService = require('../services/books')
 
-exports.getReviews = (req, res) => {
-   const reviews = reviewsService.getReviews()
+exports.getReviews = async (req, res) => {
+   const reviews = await reviewsService.getAll()
    res.json({success: true, data: reviews})
 }
 
