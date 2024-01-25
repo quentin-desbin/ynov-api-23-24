@@ -1,7 +1,7 @@
 const { users } = require('../../models')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { NotFound, NotLogged } = require('../../errors')
+const { NotFound, NotLogged, BadRequest } = require('../../errors')
 
 exports.getUsers = async () => {
     return await users.findAll({attributes: {exclude: ['password']}})
@@ -18,7 +18,7 @@ exports.getUserByUsername = async (username) => {
 exports.addUser = async (username, password, firstName, lastName) => {
     const existingUser = await this.getUserByUsername(username)
     if (existingUser) {
-        throw new Error('user already exists')
+        throw new BadRequest('user already exists')
     }
     return bcrypt.hash(password, parseInt(process.env.SALT_ROUNDS)).then((hash) => {
         return users.create({username, password: hash, firstName, lastName})

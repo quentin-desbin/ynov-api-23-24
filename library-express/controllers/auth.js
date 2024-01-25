@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const usersService = require('../services/db/users')
-const createError = require('http-errors')
+const createError = require('http-errors');
+const { ServerError } = require('../errors');
 
 // TODO : To present later
 exports.authMiddleware = async (req, res, next) => {
@@ -35,11 +36,11 @@ exports.register = async (req, res, next) => {
     try {
         const user = await usersService.addUser(username, password, firstName, lastName)
         if (!user) {
-            return next(createError(500, 'cannot register user'))
+            throw new ServerError('cannot register user')
         }
         return res.status(201).send()
     } catch(e) {
-        next(createError(400, e.message))
+        return next(createError(e.statusCode, e.message))
     }
 }
 
