@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken');
 const usersService = require('../services/db/users')
 const createError = require('http-errors')
 
+// TODO : To present later
 exports.authMiddleware = async (req, res, next) => {
-    // When test environment, we need to disabled auth
+    // When test environment, we force disabling auth (not best solution)
     if (process.env.JEST_WORKER_ID !== undefined) {
         next()
         return;
@@ -17,7 +18,7 @@ exports.authMiddleware = async (req, res, next) => {
             if (decodedToken) {
                 next();
             } else {
-                res.status(401).json({success: false, message: 'This authentication is no more valid'});
+                next(createError(401, 'Authentication is no more valid'))
             }
         } catch(e) {
             next(e);
