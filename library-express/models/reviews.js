@@ -5,14 +5,15 @@ module.exports = (instance) => {
         note: {
             type: DataTypes.INTEGER,
         },
-        userId: {
+        // Optional
+        /*userId: {
             primaryKey: true,
             type: DataTypes.INTEGER
         },
         bookId: {
             primaryKey: true,
             type: DataTypes.INTEGER
-        }
+        }*/
     }, {
         timestamps: false
     })
