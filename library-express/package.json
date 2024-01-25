@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.withdb.js",
+    "dev": "nodemon server.withdb.js",
     "test": "jest"
   },
   "author": "",
