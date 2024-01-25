@@ -1,13 +1,13 @@
-const booksService = require('../services/books')
+const booksService = require('../services/db/books')
 const createError = require('http-errors')
 
 exports.getBooks = async (req, res) => {
-   const books = booksService.getBooks()
+   const books = await booksService.getBooks()
    res.json({success: true, data: books})
 }
 
 exports.getBookById = async (req, res, next) => {
-   const book = booksService.getBookById(req.params.id)
+   const book = await booksService.getBookById(req.params.id)
    if (book) {
       res.json({success: true, data: book})
    } else {
@@ -15,8 +15,8 @@ exports.getBookById = async (req, res, next) => {
    }
 }
 
-exports.addBook = (req, res, next) => {
-   const bookCreated = booksService.addBook(req.body.title, req.body.date)
+exports.addBook = async (req, res, next) => {
+   const bookCreated = await booksService.addBook(req.body.title, req.body.date)
    if (bookCreated) {
       res.status(201).json({success: true, id: bookCreated.id})
    } else {
@@ -24,9 +24,9 @@ exports.addBook = (req, res, next) => {
    }
 }
 
-exports.deleteBookById = (req, res, next) => {
+exports.deleteBookById = async (req, res, next) => {
    try {
-      booksService.deleteBookById(req.params.id)
+      await booksService.deleteBookById(req.params.id)
       res.status(204).send()
    } catch(e) {
       next(createError(404, `The book with id '${id}' doesn't exists, it cannot be deleted`))

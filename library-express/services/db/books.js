@@ -1,11 +1,11 @@
 const { books } = require('../../models')
 
 exports.getBooks = async () => {
-    return await books.findAll()
+    return books.findAll()
 }
 
 exports.getBookById = async (id) => {
-    return await books.findOne({
+    return books.findOne({
         where: {
             id
         }

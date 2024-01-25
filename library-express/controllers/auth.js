@@ -30,9 +30,6 @@ exports.authMiddleware = async (req, res, next) => {
 exports.register = async (req, res, next) => {
     const {username, password, firstName, lastName} = req.body
 
-    if (!username || !password || !firstName || !lastName) {
-        return res.status(400).json({ error: 'All inputs are mandatory!' });
-    }
     try {
         const user = await usersService.addUser(username, password, firstName, lastName)
         if (!user) {
@@ -46,15 +43,13 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     const {username, password} = req.body
-    if (!username || !password) {
-        return res.status(400).json({ error: 'username & password are mandatory' });
-    }
 
     try {
         const token = await usersService.login(username, password)
         if (token) {
             return res.status(200).json({success: true, token})
         }
+        return res.status(400).json({success: false})
     } catch(e) {
         return next(createError(e.statusCode, e.message))
     }

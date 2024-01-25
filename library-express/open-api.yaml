@@ -23,7 +23,29 @@ tags:
   - name: reviews
     description: Everything about Reviews
 paths:
-  /users/register:
+  /auth/login:
+    post:
+      tags:
+        - users
+      summary: Login as user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: "OK"
+        "404":
+          description: "User not found"
+        "500":
+          description: "Server ERROR"
+  /auth/register:
     post:
       tags:
         - users
@@ -32,7 +54,7 @@ paths:
         content:
           application/json:
             schema:
-              required: [username, password, firstName, lastName]
+              required: [username, password]
               properties:
                 username:
                   type: string
@@ -43,7 +65,7 @@ paths:
                 lastName:
                   type: string
       responses:
-        "200":
+        "201":
           description: "OK"
 
   /books:
